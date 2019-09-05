@@ -5,6 +5,7 @@
 #include "ExynosHWCHelper.h"
 #include "ExynosHWCDebug.h"
 #include "ExynosResourceRestriction.h"
+#include <unordered_set>
 
 extern update_time_info updateTimeInfo;
 #ifndef USE_MODULE_ATTR
@@ -203,17 +204,14 @@ int32_t ExynosDeviceFbInterface::makeDPURestrictions() {
     restriction_key_t queried_format_table[1024];
 
     /* Check attribute overlap */
-    for (i = 0; i < dpuInfo->dpp_cnt; i++){
-        for (j = 0; j < dpuInfo->dpp_cnt; j++){
-            if (i >= j) continue;
-            dpp_ch_restriction r1 = dpuInfo->dpp_ch[i];
-            dpp_ch_restriction r2 = dpuInfo->dpp_ch[j];
-            /* If attribute is same, will not be added to table */
-            if (r1.attr == r2.attr) {
-                mDPUInfo.overlap[j] = true;
-            }
-        }
-        HDEBUGLOGD(eDebugAttrSetting, "Index : %d, overlap %d", i, mDPUInfo.overlap[i]);
+    std::unordered_set<unsigned long> attrs;
+    for (size_t i = 0; i < dpuInfo->dpp_cnt; ++i) {
+        const dpp_ch_restriction &r = dpuInfo->dpp_ch[i];
+        if (attrs.count(r.attr))
+            mDPUInfo.overlap[i] = true;
+        else
+            attrs.insert(r.attr);
+        HDEBUGLOGD(eDebugAttrSetting, "Index : %zu, overlap %d", i, mDPUInfo.overlap[i]);
     }
 
     for (i = 0; i < dpuInfo->dpp_cnt; i++){

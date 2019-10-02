@@ -145,6 +145,7 @@ class ExynosLayer : public ExynosMPPSource {
          * Acquire fence
          */
         int32_t mAcquireFence;
+        int32_t mPrevAcquireFence;
 
         /**
          * Release fence

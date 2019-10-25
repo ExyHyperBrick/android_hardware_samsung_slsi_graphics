@@ -322,6 +322,11 @@ int32_t ExynosDeviceFbInterface::updateFeatureTable() {
 
 void ExynosDeviceFbInterface::updateRestrictions()
 {
+#ifdef DISABLE_READ_RESTRICTIONS
+    mUseQuery = false;
+    return;
+#endif
+
     struct dpp_restrictions_info *dpuInfo = &mDPUInfo.dpuInfo;
     int32_t ret = 0;
 

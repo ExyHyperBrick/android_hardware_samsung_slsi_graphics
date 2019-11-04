@@ -342,8 +342,9 @@ int32_t ExynosDisplayFbInterface::deliverWinConfigData()
 
         config[i].dst = display_config.dst;
         config[i].plane_alpha = 255;
-        if ((display_config.plane_alpha >= 0) && (display_config.plane_alpha < 255)) {
-            config[i].plane_alpha = display_config.plane_alpha;
+        int32_t planeAlpha = (int)((255 * display_config.plane_alpha) + 0.5);
+        if ((planeAlpha >= 0) && (planeAlpha < 255)) {
+            config[i].plane_alpha = planeAlpha;
         }
         if ((config[i].blending = halBlendingToDpuBlending(display_config.blending))
                 >= DECON_BLENDING_MAX) {
@@ -366,7 +367,7 @@ int32_t ExynosDisplayFbInterface::deliverWinConfigData()
         if (display_config.state == display_config.WIN_STATE_COLOR) {
             config[i].state = config[i].DECON_WIN_STATE_COLOR;
             config[i].color = display_config.color;
-            if (!((display_config.plane_alpha >= 0) && (display_config.plane_alpha <= 255)))
+            if (!((planeAlpha >= 0) && (planeAlpha <= 255)))
                 config[i].plane_alpha = 0;
         } else if ((display_config.state == display_config.WIN_STATE_BUFFER) ||
                    (display_config.state == display_config.WIN_STATE_CURSOR)) {

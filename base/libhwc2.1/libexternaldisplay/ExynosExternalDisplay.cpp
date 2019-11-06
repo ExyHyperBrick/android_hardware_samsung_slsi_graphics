@@ -573,7 +573,7 @@ void ExynosExternalDisplay::handleHotplugEvent()
     ALOGI("HPD status changed to %s, mDisplayId %d, mDisplayFd %d", mHpdStatus ? "enabled" : "disabled", mDisplayId, mDisplayInterface->getDisplayFd());
 }
 
-void ExynosExternalDisplay::initDisplayInterface(uint32_t __unused interfaceType)
+void ExynosExternalDisplay::initDisplayInterface(uint32_t interfaceType)
 {
     mDisplayInterface = new ExynosExternalDisplayFbInterfaceModule((ExynosDisplay *)this);
     mDisplayInterface->init(this);

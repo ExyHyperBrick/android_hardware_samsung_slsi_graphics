@@ -3075,7 +3075,7 @@ int32_t ExynosDisplay::setColorTransform(
 #ifdef HWC_SUPPORT_COLOR_TRANSFORM
     int ret = mDisplayInterface->setColorTransform(matrix, hint);
     if (ret != HWC2_ERROR_NONE) {
-        mColorTransformHint = HAL_COLOR_TRANSFORM_ERROR;
+        mColorTransformHint = ret;
         setGeometryChanged(GEOMETRY_DISPLAY_COLOR_TRANSFORM_CHANGED);
     }
     return ret;

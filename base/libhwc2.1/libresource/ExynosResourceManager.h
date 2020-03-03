@@ -173,7 +173,7 @@ class ExynosResourceManager {
 
         mpp_phycal_type_t getPhysicalType(int ch);
         uint32_t getFeatureTableSize();
-        const ExynosMPPVector& getOtfMPPs() { return mOtfMPPs; };
+        const static ExynosMPPVector& getOtfMPPs() { return mOtfMPPs; };
 
         virtual void generateResourceTable();
         void updateTableEvenly(uint32_t tableSize);

@@ -675,6 +675,13 @@ int32_t ExynosLayer::setLayerPerFrameMetadataBlobs(uint32_t numElements, const i
     return NO_ERROR;
 }
 
+int32_t ExynosLayer::setLayerGenericMetadata(hwc2_layer_t __unused layer,
+        uint32_t __unused keyLength, const char* __unused key,
+        bool __unused mandatory, uint32_t __unused valueLength, const uint8_t* __unused value)
+{
+    return HWC2_ERROR_NONE;
+}
+
 void ExynosLayer::resetValidateData()
 {
     mValidateCompositionType = HWC2_COMPOSITION_INVALID;

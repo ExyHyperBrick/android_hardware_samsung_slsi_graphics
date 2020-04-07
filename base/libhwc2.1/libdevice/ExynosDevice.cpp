@@ -534,7 +534,7 @@ uint32_t ExynosDevice::getMaxVirtualDisplayCount() {
 int32_t ExynosDevice::registerCallback (
         int32_t descriptor, hwc2_callback_data_t callbackData,
         hwc2_function_pointer_t point) {
-    if (descriptor < 0 || descriptor > HWC2_CALLBACK_VSYNC)
+    if (descriptor < 0 || descriptor > HWC2_CALLBACK_SEAMLESS_POSSIBLE)
         return HWC2_ERROR_BAD_PARAMETER;
 
     mCallbackInfos[descriptor].callbackData = callbackData;
@@ -1208,4 +1208,11 @@ int ExynosDevice::isNeedCompressedTargetBuffer(uint64_t displayId)
     target_display->mClientCompositionInfo.mCompressed = false;
     target_display->mExynosCompositionInfo.mCompressed = false;
     return 0;
+}
+
+void ExynosDevice::getLayerGenericMetadataKey(uint32_t __unused keyIndex,
+        uint32_t* outKeyLength, char* __unused outKey, bool* __unused outMandatory)
+{
+    *outKeyLength = 0;
+    return;
 }

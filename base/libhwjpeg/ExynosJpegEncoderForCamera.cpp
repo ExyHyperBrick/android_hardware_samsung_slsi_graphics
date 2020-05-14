@@ -106,6 +106,8 @@ ExynosJpegEncoderForCamera::ExynosJpegEncoderForCamera(bool bBTBComp)
     m_extraInfo.appInfo = m_appInfo;
 
     mThumbnailScaler.reset(ThumbnailScaler::createInstance());
+    if (!mThumbnailScaler->available())
+        ALOGW("Thumbnail scaler is not available.");
 
     ALOGD("ExynosJpegEncoderForCamera Created: %p, ION %d", this, m_fdIONClient);
 }

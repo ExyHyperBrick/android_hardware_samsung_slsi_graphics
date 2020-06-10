@@ -25,6 +25,7 @@
 #include "ExynosDisplay.h"
 #include "ExynosHWCHelper.h"
 #include "ExynosMPPModule.h"
+#include "ExynosResourceRestriction.h"
 
 using namespace android;
 
@@ -61,6 +62,21 @@ typedef uint32_t displayEnableMap_t;
 
 #ifndef SELECTED_LOGIC
 #define SELECTED_LOGIC UNDEFINED
+#endif
+
+#ifndef USE_MODULE_DPU_ATTR_MAP
+const dpu_attr_map_t dpu_attr_map_table [] =
+{
+    {DPP_ATTR_AFBC, MPP_ATTR_AFBC},
+    {DPP_ATTR_BLOCK, MPP_ATTR_BLOCK_MODE},
+    {DPP_ATTR_FLIP, MPP_ATTR_FLIP_H | MPP_ATTR_FLIP_V},
+    {DPP_ATTR_ROT, MPP_ATTR_ROT_90},
+    {DPP_ATTR_SCALE, MPP_ATTR_SCALE},
+    {DPP_ATTR_HDR, MPP_ATTR_HDR10},
+    {DPP_ATTR_C_HDR, MPP_ATTR_HDR10},
+    {DPP_ATTR_C_HDR10_PLUS, MPP_ATTR_HDR10PLUS},
+    {DPP_ATTR_WCG, MPP_ATTR_WCG},
+};
 #endif
 
 /* Based on multi-resolution feature */

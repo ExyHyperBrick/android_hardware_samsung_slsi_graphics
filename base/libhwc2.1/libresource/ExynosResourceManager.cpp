@@ -22,7 +22,6 @@
 #include <cutils/properties.h>
 #include "ExynosResourceManager.h"
 #include "ExynosMPPModule.h"
-#include "ExynosResourceRestriction.h"
 #include "ExynosLayer.h"
 #include "ExynosHWCDebug.h"
 #include "ExynosHWCHelper.h"

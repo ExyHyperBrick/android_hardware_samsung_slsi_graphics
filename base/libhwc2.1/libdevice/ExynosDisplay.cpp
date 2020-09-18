@@ -4737,7 +4737,7 @@ int32_t ExynosDisplay::getHdrCapabilities(uint32_t* outNumTypes,
             return HWC2_ERROR_BAD_CONFIG;
     }
 
-    *outMaxLuminance = mHdrTypeNum;
+    *outMaxLuminance = mMaxLuminance;
     *outMaxAverageLuminance = mMaxAverageLuminance;
     *outMinLuminance = mMinLuminance;
 

@@ -500,6 +500,9 @@ void ExynosDevice::dump(uint32_t *outSize, char *outBuffer) {
             localTime->tm_hour, localTime->tm_min,
             localTime->tm_sec, updateTimeInfo.lastPresentTime.tv_usec/1000);
 
+    result.appendFormat("\n");
+    mResourceManager->dump(result);
+
     for (size_t i = 0;i < mDisplays.size(); i++) {
         ExynosDisplay *display = mDisplays[i];
         if (display->mPlugState == true)

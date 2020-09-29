@@ -193,6 +193,8 @@ class ExynosResourceManager {
         virtual bool hasHDR10PlusMPP();
         virtual void setM2mTargetCompression();
 
+        void dump(String8 &result);
+
     private:
         uint32_t mUseDpuDisplayNum = 0;
         displayEnableMap_t mDisplayEnableState = 1;

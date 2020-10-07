@@ -1086,14 +1086,6 @@ int32_t ExynosResourceManager::validateLayer(uint32_t index, ExynosDisplay *disp
         return eDimLayer;
     }
 
-    /* Process to Source copy layer blending exception */
-    if ((display->mUseDpu) &&
-        (display->mBlendingNoneIndex != -1) && (display->mLayers.size() > 0)) {
-        if ((layer->mOverlayPriority < ePriorityHigh) &&
-            ((int)index <= display->mBlendingNoneIndex))
-            return eSourceOverBelow;
-    }
-
     if (layer->mLayerBuffer == NULL)
         return eInvalidHandle;
     if (isSrcCropFloat(layer->mPreprocessedInfo.sourceCrop))
@@ -1319,13 +1311,12 @@ int32_t ExynosResourceManager::assignLayer(ExynosDisplay *display, ExynosLayer *
     }
 
     if ((validateFlag == NO_ERROR) || (validateFlag == eInsufficientWindow) ||
-        (validateFlag == eDimLayer) || (validateFlag == eSourceOverBelow)) {
+        (validateFlag == eDimLayer)) {
         bool isAssignable = false;
         uint64_t isSupported = 0;
         /* 1. Find available otfMPP */
-        if ((display->mUseDpu) &&
-            (validateFlag != eInsufficientWindow) &&
-            (validateFlag != eSourceOverBelow)) {
+        if (display->mUseDpu &&
+            validateFlag != eInsufficientWindow) {
             for (uint32_t j = 0; j < mOtfMPPs.size(); j++) {
 #ifdef USE_DEDICATED_TOP_WINDOW
                 if((mOtfMPPs[j]->mPhysicalType == DEDICATED_CHANNEL_TYPE) &&
@@ -1364,8 +1355,7 @@ int32_t ExynosResourceManager::assignLayer(ExynosDisplay *display, ExynosLayer *
             /* Only G2D can be assigned if layer is supported by G2D
              * when window is not sufficient
              */
-            if (((validateFlag == eInsufficientWindow) ||
-                 (validateFlag == eSourceOverBelow)) &&
+            if ((validateFlag == eInsufficientWindow) &&
                     (!(mM2mMPPs[j]->mMaxSrcLayerNum > 1))) {
                 HDEBUGLOGD(eDebugResourceAssigning, "\t\tInsufficient window but exynosComposition is not assigned");
                 continue;

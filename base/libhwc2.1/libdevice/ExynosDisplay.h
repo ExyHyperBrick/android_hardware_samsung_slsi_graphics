@@ -382,6 +382,7 @@ class ExynosDisplay {
          * Layer list those sorted by z-order
          */
         ExynosSortedLayer mLayers;
+        std::vector<ExynosLayer*> mIgnoreLayers;
 
         ExynosResourceManager *mResourceManager;
 
@@ -551,6 +552,7 @@ class ExynosDisplay {
         ExynosLayer *getLayer(uint32_t index);
         ExynosLayer *checkLayer(hwc2_layer_t addr);
 
+        void checkIgnoreLayers();
         virtual void doPreProcessing();
 
         int checkLayerFps();

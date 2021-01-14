@@ -70,7 +70,7 @@ bool exynosMPPSourceComp(const ExynosMPPSource* l, const ExynosMPPSource* r)
 }
 
 ExynosMPPSource::ExynosMPPSource()
-    : mSourceType(MPP_SOURCE_NO_TYPE),
+    : mSourceType(MPP_SOURCE_MAX),
     mSource(NULL),
     mOtfMPP(NULL),
     mM2mMPP(NULL)

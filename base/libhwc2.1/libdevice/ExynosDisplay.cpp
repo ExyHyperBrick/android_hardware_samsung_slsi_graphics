@@ -3251,6 +3251,10 @@ int32_t ExynosDisplay::getDisplayCapabilities(uint32_t* outNumCapabilities,
     capabilityNum++;
 #endif
 
+#ifdef HWC_SUPPORT_COLOR_TRANSFORM
+    capabilityNum++;
+#endif
+
     if (outCapabilities == NULL) {
         *outNumCapabilities = capabilityNum;
         return HWC2_ERROR_NONE;
@@ -3267,6 +3271,10 @@ int32_t ExynosDisplay::getDisplayCapabilities(uint32_t* outNumCapabilities,
 
 #ifdef USES_DOZEMODE
     outCapabilities[index++] = HWC2_DISPLAY_CAPABILITY_DOZE;
+#endif
+
+#ifdef HWC_SUPPORT_COLOR_TRANSFORM
+    outCapabilities[index++] = HWC2_DISPLAY_CAPABILITY_SKIP_CLIENT_COLOR_TRANSFORM;
 #endif
 
     return HWC2_ERROR_NONE;

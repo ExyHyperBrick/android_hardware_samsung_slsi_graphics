@@ -3674,6 +3674,8 @@ int32_t ExynosDisplay::validateDisplay(
     // Reset current frame flags for Fence Tracer
     resetFenceCurFlag(this);
 
+    for (size_t i = 0; i < mLayers.size(); i++) mLayers[i]->setSrcAcquireFence();
+
     doPreProcessing();
     checkLayerFps();
     if (exynosHWCControl.useDynamicRecomp == true && mDREnable)

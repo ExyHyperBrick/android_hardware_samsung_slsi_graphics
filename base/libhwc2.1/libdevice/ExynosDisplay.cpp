@@ -16,6 +16,7 @@
 
 #define ATRACE_TAG (ATRACE_TAG_GRAPHICS | ATRACE_TAG_HAL)
 //#include <linux/fb.h>
+#include <processgroup/processgroup.h>
 #include <sys/ioctl.h>
 #include <linux/fb.h>
 #include <cutils/properties.h>
@@ -2704,6 +2705,14 @@ int32_t ExynosDisplay::presentDisplay(int32_t* outRetireFence) {
 
     int ret = 0;
     String8 errString;
+    thread_local bool setTaskProfileDone = false;
+
+    if (setTaskProfileDone == false) {
+        if (!SetTaskProfiles(gettid(), {"SFMainPolicy"})) {
+            ALOGW("Failed to add `%d` into SFMainPolicy", gettid());
+        }
+        setTaskProfileDone = true;
+    }
 
     Mutex::Autolock lock(mDisplayMutex);
 

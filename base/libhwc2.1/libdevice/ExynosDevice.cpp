@@ -549,6 +549,11 @@ int32_t ExynosDevice::registerCallback (
 #if defined(USES_DUAL_DISPLAY)
             callbackFunc(callbackData, getDisplayId(HWC_DISPLAY_PRIMARY, 1), HWC2_CONNECTION_CONNECTED);
 #endif
+        } else {
+            // unregistering callback can be used as a sign of ComposerClient's death
+            for (auto it : mDisplays) {
+                it->cleanupAfterClientDeath();
+            }
         }
     }
 

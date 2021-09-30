@@ -699,7 +699,8 @@ class ExynosDisplay {
             SKIP_ERR_HAS_REQUEST,
             SKIP_ERR_DISP_NOT_CONNECTED,
             SKIP_ERR_DISP_NOT_POWER_ON,
-            SKIP_ERR_FORCE_VALIDATE
+            SKIP_ERR_FORCE_VALIDATE,
+            SKIP_ERR_INVALID_CLIENT_TARGET_BUFFER
         };
         virtual int32_t canSkipValidate();
 
@@ -1143,6 +1144,9 @@ class ExynosDisplay {
 
         virtual void requestHiberExit();
         virtual void initHiberState();
+
+        void cleanupAfterClientDeath();
+
     protected:
         virtual bool getHDRException(ExynosLayer *layer);
         void setPresentAndClearRenderingStatesFlags();

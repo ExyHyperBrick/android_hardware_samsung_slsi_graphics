@@ -2682,6 +2682,11 @@ int32_t ExynosDisplay::canSkipValidate() {
                 return SKIP_ERR_SKIP_STATIC_CHANGED;
         }
 
+        if (mClientCompositionInfo.mHasCompositionLayer &&
+            mClientCompositionInfo.mTargetBuffer == NULL) {
+            return SKIP_ERR_INVALID_CLIENT_TARGET_BUFFER;
+        }
+
         /*
          * If there is hwc2_layer_request_t
          * validateDisplay() can't be skipped
@@ -5116,4 +5121,13 @@ void ExynosDisplay::initHiberState() {
     if (mHiberState.hiberExitFd == NULL) return;
     mHiberState.exitRequested = false;
     return;
+}
+
+void ExynosDisplay::cleanupAfterClientDeath() {
+    // Invalidate the client target buffer because it will be freed when the client dies
+    mClientCompositionInfo.mTargetBuffer = NULL;
+    // Invalidate the skip static flag so that we have to get a new target buffer first
+    // before we can skip the static layers
+    mClientCompositionInfo.mSkipStaticInitFlag = false;
+    mClientCompositionInfo.mSkipFlag = false;
 }

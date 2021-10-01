@@ -25,6 +25,12 @@ build_dirs :=  \
 
 ifdef BOARD_HWC_VERSION
 build_dirs += $(BOARD_HWC_VERSION)
+
+ifeq ($(BOARD_HWC_VERSION), hwc3)
+#hwc3 depends libexynosdisplay in libhwc2.1
+build_dirs += libhwc2.1
+endif
+
 else
 ifeq ($(BOARD_USES_HWC2), true)
 build_dirs += libhwc2

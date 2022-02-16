@@ -15,6 +15,8 @@
  */
 //#define LOG_NDEBUG 0
 
+#include <chrono>
+
 #include "ExynosHWCDebug.h"
 #include "ExynosPrimaryDisplay.h"
 #include "ExynosDevice.h"
@@ -23,6 +25,11 @@
 #include "ExynosDisplayFbInterfaceModule.h"
 
 extern struct exynos_hwc_control exynosHWCControl;
+
+constexpr auto nsecsPerSec = std::chrono::nanoseconds(std::chrono::seconds(1)).count();
+constexpr auto nsecsPerMs = std::chrono::nanoseconds(std::chrono::milliseconds(1)).count();
+
+static constexpr const char* PROPERTY_BOOT_MODE = "persist.vendor.display.primary.boot_config";
 
 ExynosPrimaryDisplay::ExynosPrimaryDisplay(uint32_t index, ExynosDevice *device)
     :   ExynosDisplay(index, device)
@@ -121,6 +128,71 @@ int ExynosPrimaryDisplay::getDDIScalerMode(int width, int height) {
     }
 
     return 1; // WQHD
+}
+
+int32_t ExynosPrimaryDisplay::setBootDisplayConfig(int32_t config) {
+    auto hwcConfig = static_cast<hwc2_config_t>(config);
+
+    const auto &it = mDisplayConfigs.find(hwcConfig);
+    if (it == mDisplayConfigs.end()) {
+        DISPLAY_LOGE("%s: invalid config %d", __func__, config);
+        return HWC2_ERROR_BAD_CONFIG;
+    }
+
+    const auto &mode = it->second;
+    if (mode.vsyncPeriod == 0)
+        return HWC2_ERROR_BAD_CONFIG;
+
+    int refreshRate = round(nsecsPerSec / mode.vsyncPeriod * 0.1f) * 10;
+    char modeStr[PROPERTY_VALUE_MAX];
+    int ret = snprintf(modeStr, sizeof(modeStr), "%dx%d@%d",
+             mode.width, mode.height, refreshRate);
+    if (ret <= 0)
+        return HWC2_ERROR_BAD_CONFIG;
+
+    ALOGD("%s: mode=%s (%d) vsyncPeriod=%d", __func__, modeStr, config,
+            mode.vsyncPeriod);
+    ret = property_set(PROPERTY_BOOT_MODE, modeStr);
+
+    return !ret ? HWC2_ERROR_NONE : HWC2_ERROR_BAD_CONFIG;
+}
+
+int32_t ExynosPrimaryDisplay::clearBootDisplayConfig() {
+    auto ret = property_set(PROPERTY_BOOT_MODE, nullptr);
+
+    ALOGD("%s: clearing boot mode", __func__);
+    return !ret ? HWC2_ERROR_NONE : HWC2_ERROR_BAD_CONFIG;
+}
+
+int32_t ExynosPrimaryDisplay::getPreferredDisplayConfigInternal(int32_t *outConfig) {
+    char modeStr[PROPERTY_VALUE_MAX];
+
+    auto ret = property_get(PROPERTY_BOOT_MODE, modeStr, nullptr);
+    if (ret < 0)
+        return HWC2_ERROR_BAD_CONFIG;
+
+    int width, height;
+    int fps = 0;
+
+    ret = sscanf(modeStr, "%dx%d@%d", &width, &height, &fps);
+    if ((ret < 3) || !fps) {
+        ALOGD("%s: unable to find boot config for mode: %s", __func__, modeStr);
+        return HWC2_ERROR_BAD_CONFIG;
+    }
+
+    const auto vsyncPeriod = nsecsPerSec / fps;
+
+    for (auto const& [config, mode] : mDisplayConfigs) {
+        long delta = abs(vsyncPeriod - mode.vsyncPeriod);
+        if ((width == mode.width) && (height == mode.height) &&
+            (delta < nsecsPerMs)) {
+            ALOGD("%s: found preferred display config for mode: %s=%d",
+                  __func__, modeStr, config);
+            *outConfig = config;
+            return HWC2_ERROR_NONE;
+        }
+    }
+    return HWC2_ERROR_BAD_CONFIG;
 }
 
 int32_t ExynosPrimaryDisplay::setPowerMode(

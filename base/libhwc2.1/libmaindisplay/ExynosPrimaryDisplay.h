@@ -30,6 +30,10 @@ class ExynosPrimaryDisplay : public ExynosDisplay {
         virtual int getDDIScalerMode(int width, int height);
 
         virtual void initDisplayInterface(uint32_t interfaceType);
+
+        virtual int32_t setBootDisplayConfig(int32_t config) override;
+        virtual int32_t clearBootDisplayConfig() override;
+        virtual int32_t getPreferredDisplayConfigInternal(int32_t *outConfig) override;
     protected:
         virtual int32_t setPowerMode(
                 int32_t /*hwc2_power_mode_t*/ mode);

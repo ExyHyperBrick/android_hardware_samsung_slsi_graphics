@@ -165,6 +165,30 @@ int32_t ExynosDisplayFbInterface::setActiveConfig(hwc2_config_t config)
                 mExynosDisplay->mXres, mExynosDisplay->mYres,
                 mExynosDisplay->mVsyncPeriod,
                 mExynosDisplay->mXdpi, mExynosDisplay->mYdpi);
+#elifdef USES_SET_DISPLAY_MODE_IOCTL
+        displayConfigs_t _config = mExynosDisplay->mDisplayConfigs[config];
+        struct decon_display_mode display_mode;
+        memset(&display_mode, 0, sizeof(decon_display_mode));
+
+        display_mode.index = config;
+        display_mode.width = _config.width;
+        display_mode.height = _config.height;
+        display_mode.fps = (int)(1000000000 / _config.vsyncPeriod);
+
+        if ((ret = ioctl(mDisplayFd, EXYNOS_SET_DISPLAY_MODE, &display_mode)) < 0) {
+            ALOGE("EXYNOS_SET_DISPLAY_MODE failed errno : %d", errno);
+            return HWC2_ERROR_BAD_CONFIG;
+        }
+
+        mExynosDisplay->mXres = _config.width;
+        mExynosDisplay->mYres = _config.height;
+        mExynosDisplay->mVsyncPeriod = _config.vsyncPeriod;
+        mExynosDisplay->mXdpi = _config.Xdpi;
+        mExynosDisplay->mYdpi = _config.Ydpi;
+        ALOGI("Display config changed to : %dx%d, %dms, %d Xdpi, %d Ydpi",
+                mExynosDisplay->mXres, mExynosDisplay->mYres,
+                mExynosDisplay->mVsyncPeriod,
+                mExynosDisplay->mXdpi, mExynosDisplay->mYdpi);
 #endif
     }
 
@@ -1122,9 +1146,14 @@ void ExynosPrimaryDisplayFbInterface::getDisplayConfigsFromDPU()
         configs.width = mode.width;
         configs.height = mode.height;
 
-        // TODO : Xdpi should be recalaulated
         configs.Xdpi = 1000 * (mode.width * 25.4f) / mode.mm_width;
         configs.Ydpi = 1000 * (mode.height * 25.4f) / mode.mm_height;
+
+        // Update dpi values for native display mode with real ones
+        if (configs.width == mExynosDisplay->mXres && configs.height == mExynosDisplay->mYres) {
+            mExynosDisplay->mXdpi = configs.Xdpi;
+            mExynosDisplay->mYdpi = configs.Ydpi;
+        }
 
         /* TODO : add cpu affinity/clock settings here */
         configs.cpuIDs = 0;

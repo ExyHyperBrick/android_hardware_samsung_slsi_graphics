@@ -35,6 +35,7 @@ endif
 LOCAL_PROPRIETARY_MODULE := true
 
 LOCAL_C_INCLUDES += \
+	$(TOP)/hardware/samsung_slsi/graphics/base/include \
 	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2/libdevice \
 	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2/libmaindisplay \
 	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2/libexternaldisplay \

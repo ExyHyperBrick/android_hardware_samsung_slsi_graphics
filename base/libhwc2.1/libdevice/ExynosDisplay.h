@@ -17,6 +17,8 @@
 #ifndef _EXYNOSDISPLAY_H
 #define _EXYNOSDISPLAY_H
 
+#include <fstream>
+
 #include <utils/Vector.h>
 #include <utils/KeyedVector.h>
 #include <system/graphics.h>
@@ -511,7 +513,7 @@ class ExynosDisplay {
         bool mIsSkipFrame;
 
         hiberState_t mHiberState;
-        FILE *mBrightnessFd;
+        std::ofstream mBrightnessOfs;
         unsigned int mMaxBrightness;
 
         hwc_vsync_period_change_constraints_t mVsyncPeriodChangeConstraints;

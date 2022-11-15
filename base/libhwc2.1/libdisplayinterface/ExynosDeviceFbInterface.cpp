@@ -12,11 +12,9 @@ extern feature_support_t feature_table[];
 #endif
 
 void handle_vsync_event(ExynosDevice *dev, ExynosDisplay *display) {
-
     int err = 0;
 
-    if ((dev == NULL) || (display == NULL)
-            || (dev->mCallbackInfos[HWC2_CALLBACK_VSYNC].funcPointer == NULL))
+    if ((dev == NULL) || (display == NULL))
         return;
 
     dev->compareVsyncPeriod();
@@ -25,6 +23,11 @@ void handle_vsync_event(ExynosDevice *dev, ExynosDisplay *display) {
         dev->mCallbackInfos[HWC2_CALLBACK_VSYNC].callbackData;
     HWC2_PFN_VSYNC callbackFunc =
         (HWC2_PFN_VSYNC)dev->mCallbackInfos[HWC2_CALLBACK_VSYNC].funcPointer;
+
+    hwc2_callback_data_t callbackData_2_4 =
+        dev->mCallbackInfos[HWC2_CALLBACK_VSYNC_2_4].callbackData;
+    HWC2_PFN_VSYNC_2_4 callbackFunc_2_4 =
+        (HWC2_PFN_VSYNC_2_4)dev->mCallbackInfos[HWC2_CALLBACK_VSYNC_2_4].funcPointer;
 
     err = lseek(display->mVsyncFd, 0, SEEK_SET);
 
@@ -35,24 +38,26 @@ void handle_vsync_event(ExynosDevice *dev, ExynosDisplay *display) {
         return;
     }
 
-    if (callbackData != NULL && callbackFunc != NULL) {
-        /** Vsync read **/
-        char buf[4096];
-        err = read(display->mVsyncFd , buf, sizeof(buf));
-        if (err < 0) {
-            ALOGE("error reading vsync timestamp: %s", strerror(errno));
-            return;
-        }
-
-        if (dev->mVsyncDisplayId != display->mDisplayId)
-            return;
-
-        dev->mTimestamp = strtoull(buf, NULL, 0);
-
-        gettimeofday(&updateTimeInfo.lastUeventTime, NULL);
-        /** Vsync callback **/
-        callbackFunc(callbackData, getDisplayId(HWC_DISPLAY_PRIMARY, 0), dev->mTimestamp);
+    /** Vsync read **/
+    char buf[4096];
+    err = read(display->mVsyncFd , buf, sizeof(buf));
+    if (err < 0) {
+        ALOGE("error reading vsync timestamp: %s", strerror(errno));
+        return;
     }
+
+    if (dev->mVsyncDisplayId != display->mDisplayId)
+        return;
+
+    dev->mTimestamp = strtoull(buf, NULL, 0);
+
+    gettimeofday(&updateTimeInfo.lastUeventTime, NULL);
+
+    /** Vsync callback **/
+    if (callbackData != NULL && callbackFunc != NULL)
+        callbackFunc(callbackData, getDisplayId(HWC_DISPLAY_PRIMARY, 0), dev->mTimestamp);
+    if (callbackData_2_4 != NULL && callbackFunc_2_4 != NULL)
+        callbackFunc_2_4(callbackData_2_4, getDisplayId(HWC_DISPLAY_PRIMARY, 0), dev->mTimestamp, display->mVsyncPeriod);
 }
 
 void *hwc_eventHndler_thread(void *data) {

@@ -23,6 +23,7 @@ ifndef TARGET_SOC_BASE
 endif
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils libhardware \
+	android.hardware.graphics.composer@2.4 \
 	android.hardware.graphics.allocator@2.0 \
 	android.hardware.graphics.mapper@2.0 \
 	libGrallocWrapper libhardware_legacy libutils libsync libacryl libui libion_exynos libion
@@ -89,6 +90,7 @@ include $(CLEAR_VARS)
 
 LOCAL_HEADER_LIBRARIES := libhardware_legacy_headers libbinder_headers libexynos_headers
 LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libbinder libexynosdisplay libacryl \
+	android.hardware.graphics.composer@2.4 \
 	android.hardware.graphics.allocator@2.0 \
 	android.hardware.graphics.mapper@2.0 \
 	libGrallocWrapper libion
@@ -134,6 +136,7 @@ include $(CLEAR_VARS)
 LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libexynosdisplay libacryl \
+	android.hardware.graphics.composer@2.4 \
 	android.hardware.graphics.allocator@2.0 \
 	android.hardware.graphics.mapper@2.0 \
 	libGrallocWrapper libui libion

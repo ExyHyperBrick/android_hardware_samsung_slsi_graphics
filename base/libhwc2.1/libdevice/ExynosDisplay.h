@@ -20,6 +20,7 @@
 #include <utils/Vector.h>
 #include <utils/KeyedVector.h>
 #include <system/graphics.h>
+#include <android/hardware/graphics/composer/2.4/types.h>
 
 #include "ExynosHWC.h"
 #include <hardware/hwcomposer2.h>
@@ -96,6 +97,12 @@ enum {
     ePrimaryDisplay  = 0x00000001,
     eExternalDisplay = 0x00000002,
     eVirtualDisplay  = 0x00000004,
+};
+
+enum class hwc_request_state_t {
+    SET_CONFIG_STATE_NONE = 0,
+    SET_CONFIG_STATE_PENDING,
+    SET_CONFIG_STATE_REQUESTED,
 };
 
 class AssignedResourceVector : public android::SortedVector< resource_set_t* > {
@@ -506,6 +513,11 @@ class ExynosDisplay {
         hiberState_t mHiberState;
         FILE *mBrightnessFd;
         unsigned int mMaxBrightness;
+
+        hwc_vsync_period_change_constraints_t mVsyncPeriodChangeConstraints;
+        hwc_vsync_period_change_timeline_t mVsyncAppliedTimeLine;
+        hwc_request_state_t mConfigRequestState;
+        hwc2_config_t mDesiredConfig;
 
         void initDisplay();
 
@@ -998,6 +1010,11 @@ class ExynosDisplay {
          *       display
          */
         int32_t getClientTargetProperty(hwc_client_target_property_t* outClientTargetProperty);
+
+        /* setActiveConfig MISCs */
+        bool isBadConfig(hwc2_config_t config);
+        bool needNotChangeConfig(hwc2_config_t config);
+        int32_t doDisplayConfigPostProcess(ExynosDevice *dev);
 
         /* TODO : TBD */
         int32_t setCursorPositionAsync(uint32_t x_pos, uint32_t y_pos);

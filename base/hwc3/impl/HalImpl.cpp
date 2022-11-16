@@ -711,12 +711,9 @@ int32_t HalImpl::setLayerColor(int64_t display, int64_t layer, Color color) {
     return halLayer->setLayerColor(hwcColor);
 }
 
-int32_t HalImpl::setLayerColorTransform(int64_t display, int64_t layer,
-                                        const std::vector<float>& matrix) {
-    ExynosLayer *halLayer;
-    RET_IF_ERR(getHalLayer(display, layer, halLayer));
-
-    return halLayer->setLayerColorTransform(matrix.data());
+int32_t HalImpl::setLayerColorTransform(int64_t __unused display, int64_t __unused layer,
+                                        const std::vector<float>& __unused matrix) {
+    return HWC2_ERROR_UNSUPPORTED;
 }
 
 int32_t HalImpl::setLayerCompositionType(int64_t display, int64_t layer, Composition type) {
@@ -961,19 +958,9 @@ int32_t HalImpl::validateDisplay(int64_t display, std::vector<int64_t>* outChang
 }
 
 int HalImpl::setExpectedPresentTime(
-        int64_t display, const std::optional<ClockMonotonicTimestamp> expectedPresentTime) {
-    ExynosDisplay* halDisplay;
-    RET_IF_ERR(getHalDisplay(display, halDisplay));
+        int64_t __unused display, const std::optional<ClockMonotonicTimestamp> __unused expectedPresentTime) {
 
-    if (!expectedPresentTime.has_value()) return HWC2_ERROR_NONE;
-
-    if (halDisplay->getPendingExpectedPresentTime() != 0) {
-        ALOGW("HalImpl: set expected present time multiple times in one frame");
-    }
-
-    halDisplay->setExpectedPresentTime(expectedPresentTime->timestampNanos);
-
-    return HWC2_ERROR_NONE;
+    return HWC2_ERROR_UNSUPPORTED;
 }
 
 } // namespace aidl::android::hardware::graphics::composer3::impl

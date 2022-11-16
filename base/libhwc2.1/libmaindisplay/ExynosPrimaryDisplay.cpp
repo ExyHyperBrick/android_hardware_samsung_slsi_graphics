@@ -168,8 +168,12 @@ int32_t ExynosPrimaryDisplay::getPreferredDisplayConfigInternal(int32_t *outConf
     char modeStr[PROPERTY_VALUE_MAX];
 
     auto ret = property_get(PROPERTY_BOOT_MODE, modeStr, nullptr);
-    if (ret < 0)
-        return HWC2_ERROR_BAD_CONFIG;
+    if (ret < 0) {
+        hwc2_config_t activeConfigBoot;
+        mDisplayInterface->getActiveConfigBoot(&activeConfigBoot);
+        *outConfig = activeConfigBoot;
+        return HWC2_ERROR_NONE;
+    }
 
     int width, height;
     int fps = 0;

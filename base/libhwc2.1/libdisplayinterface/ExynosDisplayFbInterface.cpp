@@ -868,6 +868,7 @@ void ExynosPrimaryDisplayFbInterface::init(ExynosDisplay *exynosDisplay)
 
     getDisplayHWInfo();
     getDisplayConfigsFromDPU();
+    getActiveConfig(&mActiveConfigBoot);
     choosePreferredConfig();
 }
 

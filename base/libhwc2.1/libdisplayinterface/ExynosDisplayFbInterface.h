@@ -86,6 +86,7 @@ class ExynosDisplayFbInterface : public ExynosDisplayInterface {
                 decon_win_config_data &fbConfig, bool debugPrint = false);
         void setReadbackConfig(decon_win_config *config);
         android_dataspace dpuDataspaceToHalDataspace(uint32_t dpu_dataspace);
+        int32_t choosePreferredConfig();
     protected:
         /**
          * LCD device member variables

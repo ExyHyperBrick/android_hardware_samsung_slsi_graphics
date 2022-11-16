@@ -40,6 +40,12 @@ int32_t ExynosDisplayInterface::getActiveConfig(hwc2_config_t* outConfig)
     return NO_ERROR;
 }
 
+int32_t ExynosDisplayInterface::getActiveConfigBoot(hwc2_config_t* outConfig)
+{
+    *outConfig = mActiveConfigBoot;
+    return NO_ERROR;
+}
+
 int32_t ExynosDisplayInterface::getColorModes(
         uint32_t* outNumModes,
         int32_t* outModes)

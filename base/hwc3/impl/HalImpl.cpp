@@ -125,7 +125,9 @@ void HalImpl::initCaps() {
         mCaps.insert(cap);
     }
 
+#if defined(USES_HWC_CPU_PERF_MODE) || defined(USES_SET_DISPLAY_MODE_IOCTL)
     mCaps.insert(Capability::BOOT_DISPLAY_CONFIG);
+#endif
 }
 
 int32_t HalImpl::getHalDisplay(int64_t display, ExynosDisplay*& halDisplay) {

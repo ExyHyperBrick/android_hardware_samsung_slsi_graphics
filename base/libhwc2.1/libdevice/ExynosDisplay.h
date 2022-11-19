@@ -351,6 +351,7 @@ class ExynosDisplay {
         uint32_t mYdpi;
         uint32_t mVsyncPeriod;
         int32_t mVsyncFd;
+        bool mResChanged;
 
         int                     mPanelType;
         int                     mPsrMode;
@@ -1083,6 +1084,8 @@ class ExynosDisplay {
         virtual bool getHDRException(ExynosLayer *layer);
         void setPresentAndClearRenderingStatesFlags();
         int32_t handleSkipPresent(int32_t* outRetireFence);
+
+        bool isFullScreenComposition();
 
     public:
         /**

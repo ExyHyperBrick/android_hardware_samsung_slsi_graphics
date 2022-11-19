@@ -190,6 +190,12 @@ int32_t ExynosDisplayFbInterface::setActiveConfig(hwc2_config_t config)
 #endif
     }
 
+    if (mExynosDisplay->mXres != mExynosDisplay->mDisplayConfigs[mActiveConfig].width ||
+            mExynosDisplay->mYres != mExynosDisplay->mDisplayConfigs[mActiveConfig].height) {
+        mExynosDisplay->mRenderingState = RENDERING_STATE_NONE;
+        mExynosDisplay->mResChanged = true;
+    }
+
     mActiveConfig = config;
 
     return ret;

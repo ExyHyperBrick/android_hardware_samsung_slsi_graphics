@@ -23,6 +23,7 @@ build_dirs :=  \
     libmemtrack \
     giantmscl
 
+ifndef BOARD_USES_PREBUILT_HWC
 ifdef BOARD_HWC_VERSION
 build_dirs += $(BOARD_HWC_VERSION)
 else
@@ -30,6 +31,7 @@ ifeq ($(BOARD_USES_HWC2), true)
 build_dirs += libhwc2
 else
 build_dirs += libhwc1
+endif
 endif
 endif
 

@@ -31,10 +31,78 @@ ExynosMPPModule::~ExynosMPPModule()
 {
 }
 
-uint32_t ExynosMPPModule::getMPPClock()
+uint32_t ExynosMPPModule::getSrcXOffsetAlign(struct exynos_image &src)
 {
-    if (mPhysicalType == MPP_G2D)
-        return 667000;
+    uint32_t idx = getRestrictionClassification(src);
+    return mSrcSizeRestrictions[idx].cropXAlign;
+}
+
+uint32_t ExynosMPPModule::getDstWidthAlign(struct exynos_image &dst)
+{
+    if (((dst.format == HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_SPN_S10B) ||
+         (dst.format == HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_SP_M_S10B)) &&
+        (mPhysicalType == MPP_MSC))
+        return 4;
+
+    return  ExynosMPP::getDstWidthAlign(dst);
+}
+
+bool ExynosMPPModule::isSupportedCompression(struct exynos_image &src)
+{
+    if (src.compressed) {
+        if (mPhysicalType == MPP_G2D)
+            return true;
+        else
+            return false;
+    } else {
+        return true;
+    }
+}
+
+bool ExynosMPPModule::isSupportedTransform(struct exynos_image &src)
+{
+    switch (mPhysicalType)
+    {
+    case MPP_MSC:
+    case MPP_G2D:
+        return true;
+    case MPP_DPP_G:
+    case MPP_DPP_GF:
+    case MPP_DPP_VG:
+    case MPP_DPP_VGS:
+    case MPP_DPP_VGF:
+    case MPP_DPP_VGFS:
+        if ((src.transform & HAL_TRANSFORM_ROT_90) == 0)
+        {
+            if ((src.compressed == 1) && (src.transform != 0))
+                return false;
+            return true;
+        } else {
+            return false;
+        }
+    case MPP_DPP_VGRFS:
+        if (isFormatYUV420(src.format)) {
+            return false;
+        }
+        /* RGB case */
+        if ((src.transform & HAL_TRANSFORM_ROT_90) == 0)
+        {
+            if ((src.compressed == 1) && (src.transform != 0))
+                return false;
+            return true;
+        } else {
+            return false;
+        }
+    default:
+            return true;
+    }
+}
+
+uint32_t ExynosMPPModule::getSrcMaxCropSize(struct exynos_image &src)
+{
+    if ((mPhysicalType == MPP_DPP_VGRFS) &&
+        (src.transform & HAL_TRANSFORM_ROT_90))
+        return MAX_DPP_ROT_SRC_SIZE;
     else
-        return 0;
+        return ExynosMPP::getSrcMaxCropSize(src);
 }

@@ -14,7 +14,6 @@
 
 ifneq ($(findstring exynos, $(TARGET_SOC)),)
 build_dirs :=  \
-    libhwjpeg  \
     libfimg    \
     libscaler  \
     libgscaler \
@@ -22,6 +21,10 @@ build_dirs :=  \
     libmpp \
     libmemtrack \
     giantmscl
+
+ifndef BOARD_USES_PREBUILT_LIBHWJPEG
+build_dirs += libhwjpeg
+endif
 
 ifndef BOARD_USES_PREBUILT_HWC
 ifdef BOARD_HWC_VERSION

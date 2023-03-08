@@ -15,7 +15,10 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-soc_ver := $(TARGET_SOC_BASE)
+ifndef TARGET_SOC_BASE
+	TARGET_SOC_BASE := $(TARGET_SOC)
+endif
+
 LOCAL_MODULE := android.hardware.composer.hwc3-service.slsi
 
 LOCAL_LICENSE_KINDS := SPDX-license-identifier-Apache-2.0
@@ -27,7 +30,7 @@ LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_PROPRIETARY_MODULE := true
 
 LOCAL_CFLAGS += \
-	-DSOC_VERSION=$(soc_ver) \
+	-DSOC_VERSION=$(TARGET_SOC_BASE) \
 	-DLOG_TAG=\"hwc3\"
 
 # hwc3 re-uses hwc2.2 ComposerResource and libexynosdisplay
@@ -35,7 +38,7 @@ LOCAL_SHARED_LIBRARIES := \
 	android.hardware.graphics.allocator@2.0 \
 	android.hardware.graphics.composer3-V1-ndk \
 	android.hardware.graphics.composer@2.1-resources \
-        android.hardware.graphics.composer@2.2-resources \
+	android.hardware.graphics.composer@2.2-resources \
 	android.hardware.graphics.composer@2.4 \
 	libbase \
 	libbinder \
@@ -56,20 +59,20 @@ LOCAL_HEADER_LIBRARIES := \
 	libgralloc_headers
 
 LOCAL_C_INCLUDES := \
-	$(TOP)/hardware/samsung_slsi-linaro/exynos/include \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/include \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1 \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1/libdevice \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1/libdisplayinterface \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1/libdrmresource/include \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1/libhwchelper \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1/libhwcService \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/base/libhwc2.1/libresource \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/$(soc_ver)/include \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/$(soc_ver)/libhwc2.1 \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/$(soc_ver)/libhwc2.1/libdevice \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/$(soc_ver)/libhwc2.1/libmaindisplay \
-	$(TOP)/hardware/samsung_slsi-linaro/graphics/$(soc_ver)/libhwc2.1/libresource
+	$(TOP)/hardware/samsung_slsi/exynos/include \
+	$(TOP)/hardware/samsung_slsi/graphics/base/include \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1 \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1/libdevice \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1/libdisplayinterface \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1/libdrmresource/include \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1/libhwchelper \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1/libhwcService \
+	$(TOP)/hardware/samsung_slsi/graphics/base/libhwc2.1/libresource \
+	$(TOP)/hardware/samsung_slsi/graphics/$(TARGET_SOC_BASE)/include \
+	$(TOP)/hardware/samsung_slsi/graphics/$(TARGET_SOC_BASE)/libhwc2.1 \
+	$(TOP)/hardware/samsung_slsi/graphics/$(TARGET_SOC_BASE)/libhwc2.1/libdevice \
+	$(TOP)/hardware/samsung_slsi/graphics/$(TARGET_SOC_BASE)/libhwc2.1/libmaindisplay \
+	$(TOP)/hardware/samsung_slsi/graphics/$(TARGET_SOC_BASE)/libhwc2.1/libresource
 
 LOCAL_SRC_FILES := \
 	Composer.cpp \

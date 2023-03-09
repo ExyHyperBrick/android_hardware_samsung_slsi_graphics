@@ -50,6 +50,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libhardware_legacy \
 	liblog \
 	libsync \
+	libion \
 	libutils
 
 LOCAL_STATIC_LIBRARIES := libaidlcommonsupport

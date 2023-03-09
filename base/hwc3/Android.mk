@@ -92,4 +92,5 @@ endif
 LOCAL_VINTF_FRAGMENTS = hwc3-default.xml
 LOCAL_INIT_RC := hwc3-slsi.rc
 
+include $(TOP)/hardware/samsung_slsi/graphics/base/BoardConfigCFlags.mk
 include $(BUILD_EXECUTABLE)

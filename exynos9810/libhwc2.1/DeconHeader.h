@@ -58,12 +58,12 @@ struct decon_rect {
   u32 bottom;
 };
 enum decon_idma_type {
-  IDMA_GF0 = 0,
-  IDMA_GF1,
+  IDMA_G0 = 0,
+  IDMA_G1,
   IDMA_VG0,
+  IDMA_VG1,
   IDMA_VGF0,
-  IDMA_VGS0,
-  IDMA_VGRFS0,
+  IDMA_VGF1,
   ODMA_WB,
   MAX_DECON_DMA_TYPE,
 };

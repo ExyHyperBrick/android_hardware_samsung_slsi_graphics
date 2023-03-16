@@ -30,11 +30,3 @@ ExynosMPPModule::ExynosMPPModule(ExynosResourceManager* resourceManager,
 ExynosMPPModule::~ExynosMPPModule()
 {
 }
-
-uint32_t ExynosMPPModule::getMPPClock()
-{
-    if (mPhysicalType == MPP_G2D)
-        return 667000;
-    else
-        return 0;
-}

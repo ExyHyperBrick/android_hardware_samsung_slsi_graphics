@@ -23,8 +23,6 @@ class ExynosMPPModule : public ExynosMPP {
         ExynosMPPModule(ExynosResourceManager* resourceManager, uint32_t physicalType, uint32_t logicalType, const char *name,
             uint32_t physicalIndex, uint32_t logicalIndex, uint32_t preAssignInfo);
         ~ExynosMPPModule();
-    protected:
-        virtual uint32_t getMPPClock();
 
     public:
         uint32_t mChipId;

@@ -32,6 +32,10 @@ LOCAL_SRC_FILES := \
 
 LOCAL_CFLAGS += -Wno-unused-function
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libexynosgscaler
 

@@ -17,6 +17,10 @@ include $(CLEAR_VARS)
 
 LOCAL_CFLAGS += -DLOG_TAG=\"exynos-libhwjpeg\"
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 LOCAL_SHARED_LIBRARIES := liblog libutils libcutils libion_exynos libgiantmscl
 LOCAL_HEADER_LIBRARIES := libcutils_headers libsystem_headers libhardware_headers libexynos_headers
 

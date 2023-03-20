@@ -33,6 +33,10 @@ LOCAL_CFLAGS += \
 	-DSOC_VERSION=$(TARGET_SOC_BASE) \
 	-DLOG_TAG=\"hwc3\"
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 # hwc3 re-uses hwc2.2 ComposerResource and libexynosdisplay
 LOCAL_SHARED_LIBRARIES := \
 	android.hardware.graphics.allocator@2.0 \

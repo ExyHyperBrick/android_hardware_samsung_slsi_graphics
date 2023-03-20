@@ -22,6 +22,10 @@ ifdef BOARD_USE_GIANT_MSCL
 LOCAL_CFLAGS += -DUSE_GIANT_MSCL
 endif
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 LOCAL_SHARED_LIBRARIES := liblog libutils libcutils libion_exynos
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include

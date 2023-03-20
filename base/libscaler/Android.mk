@@ -36,6 +36,10 @@ ifneq ($(filter 3.18 4.4, $(TARGET_LINUX_KERNEL_VERSION)),)
 LOCAL_CFLAGS += -DSCALER_USE_PREMUL_FMT
 endif
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libexynosscaler
 

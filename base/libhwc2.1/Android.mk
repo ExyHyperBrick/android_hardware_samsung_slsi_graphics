@@ -79,6 +79,10 @@ LOCAL_CFLAGS := -DHLOG_CODE=0
 LOCAL_CFLAGS += -DLOG_TAG=\"display\"
 LOCAL_CFLAGS += -Wno-unused-parameter
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 LOCAL_MODULE := libexynosdisplay
 LOCAL_MODULE_TAGS := optional
 
@@ -120,6 +124,10 @@ LOCAL_C_INCLUDES += \
 LOCAL_CFLAGS := -DHLOG_CODE=0
 LOCAL_CFLAGS += -DLOG_TAG=\"hwcservice\"
 
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
+
 LOCAL_SRC_FILES := \
 	libhwcService/IExynosHWC.cpp \
 	libhwcService/ExynosHWCService.cpp
@@ -148,6 +156,10 @@ LOCAL_HEADER_LIBRARIES := libhardware_legacy_headers libbinder_headers libexynos
 
 LOCAL_CFLAGS := -DHLOG_CODE=0
 LOCAL_CFLAGS += -DLOG_TAG=\"hwcomposer\"
+
+ifdef TARGET_SLSI_CLANG_OPT
+LOCAL_CFLAGS += -O3
+endif
 
 ifeq ($(BOARD_USES_HWC_SERVICES),true)
 LOCAL_CFLAGS += -DUSES_HWC_SERVICES

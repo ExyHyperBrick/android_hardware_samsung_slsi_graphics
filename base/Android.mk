@@ -31,14 +31,19 @@ ifdef BOARD_HWC_VERSION
 build_dirs += $(BOARD_HWC_VERSION)
 
 ifeq ($(BOARD_HWC_VERSION), hwc3)
+$(info Build hwc3 AIDL service, including libhwc2.1 for libexynosdisplay dependency)
 #hwc3 depends libexynosdisplay in libhwc2.1
 build_dirs += libhwc2.1
+else
+$(info Build hwc2.1 HAL)
 endif
 
 else
 ifeq ($(BOARD_USES_HWC2), true)
 build_dirs += libhwc2
+$(info Build hwc2 HAL)
 else
+$(info Build hwc1 HAL)
 build_dirs += libhwc1
 endif
 endif

@@ -3349,8 +3349,7 @@ int32_t ExynosDisplay::setActiveConfigWithConstraints(hwc2_config_t config,
     getActiveConfig(&activeConfig);
 
     if (vsyncPeriodChangeConstraints->seamlessRequired) {
-        if (mDisplayConfigs[activeConfig].width != mDisplayConfigs[config].width
-                || mDisplayConfigs[activeConfig].height != mDisplayConfigs[config].height) {
+        if (mDisplayConfigs[activeConfig].groupId != mDisplayConfigs[config].groupId) {
             DISPLAY_LOGD(eDebugDisplayConfig, "Case : Seamless is not allowed");
             return HWC2_ERROR_SEAMLESS_NOT_ALLOWED;
         }

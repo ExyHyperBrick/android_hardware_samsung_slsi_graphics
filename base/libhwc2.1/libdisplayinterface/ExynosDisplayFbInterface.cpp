@@ -111,6 +111,10 @@ int32_t ExynosDisplayFbInterface::getDisplayAttribute(
     case HWC2_ATTRIBUTE_DPI_Y:
         *outValue = mExynosDisplay->mDisplayConfigs[config].Ydpi;
         break;
+
+    case HWC2_ATTRIBUTE_CONFIG_GROUP:
+        *outValue = mExynosDisplay->mDisplayConfigs[config].groupId;
+        break;
     default:
         ALOGE("unknown display attribute %u", attribute);
         return HWC2_ERROR_BAD_CONFIG;
@@ -1124,6 +1128,9 @@ void ExynosPrimaryDisplayFbInterface::getDisplayConfigsFromDPU()
 {
     int32_t num = 0;
     decon_display_mode mode;
+    /* key: (width<<32 | height) */
+    std::map<uint64_t, uint32_t> groupIds;
+    uint32_t groupId = 0;
 
     if (ioctl(mDisplayFd, EXYNOS_GET_DISPLAY_MODE_NUM, &num) < 0) {
         ALOGI("Not support EXYNOS_GET_DISPLAY_MODE_NUM : %s", strerror(errno));
@@ -1143,6 +1150,16 @@ void ExynosPrimaryDisplayFbInterface::getDisplayConfigsFromDPU()
         configs.vsyncPeriod = 1000000000 / mode.fps;
         configs.width = mode.width;
         configs.height = mode.height;
+
+        uint64_t key = ((uint64_t)configs.width<<32) | configs.height;
+        auto it = groupIds.find(key);
+        if (it != groupIds.end()) {
+            configs.groupId = it->second;
+        } else {
+            configs.groupId = groupId;
+            groupIds.insert(std::make_pair(key, groupId));
+            groupId++;
+        }
 
         configs.Xdpi = 1000 * (mode.width * 25.4f) / mode.mm_width;
         configs.Ydpi = 1000 * (mode.height * 25.4f) / mode.mm_height;

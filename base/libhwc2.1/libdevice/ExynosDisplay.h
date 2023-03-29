@@ -305,6 +305,8 @@ typedef struct displayConfigs {
     uint32_t Xdpi;
     // HWC2_ATTRIBUTE_DPI_Y
     uint32_t Ydpi;
+    // HWC2_ATTRIBUTE_CONFIG_GROUP
+    uint32_t groupId;
     // Affinity map
     uint32_t cpuIDs;
     // min_clock

@@ -52,66 +52,8 @@ bool ExynosMPPModule::isSupportedCompression(struct exynos_image &src)
     if (src.compressed) {
         if (mPhysicalType == MPP_G2D)
             return true;
-
-        ExynosMPP *sharedMPP = NULL;
-        if (mPhysicalType == MPP_DPP_GF) {
-            if (mPhysicalIndex == 0) {
-                /* GF1 shares memory with VGF0 */
-                sharedMPP = mResourceManager->getExynosMPP(MPP_DPP_VGF, 0);
-            } else if (mPhysicalIndex == 1) {
-                /* GF0 shares memory with VGRFS0 */
-                sharedMPP = mResourceManager->getExynosMPP(MPP_DPP_VGRFS, 0);
-            } else {
-                MPP_LOGE("Invalid MPP_DPP_GF index(%d)", mPhysicalIndex);
-                return false;
-            }
-        } else if (mPhysicalType == MPP_DPP_VGF) {
-            /* GF1 shares memory with VGF0 */
-            sharedMPP = mResourceManager->getExynosMPP(MPP_DPP_GF, 0);
-        } else if (mPhysicalType == MPP_DPP_VGRFS) {
-            /* GF0 shares memory with VGRFS0 */
-            sharedMPP = mResourceManager->getExynosMPP(MPP_DPP_GF, 1);
-        } else {
-            /* Other mpp don't support decompression */
+        else
             return false;
-        }
-
-        if (sharedMPP == NULL) {
-            MPP_LOGE("sharedMPP is NULL");
-            return false;
-        }
-
-        if ((sharedMPP->mAssignedState & MPP_ASSIGN_STATE_ASSIGNED) == 0)
-            return true;
-        else {
-            if (sharedMPP->mAssignedSources.size() == 1) {
-                exynos_image checkImg = sharedMPP->mAssignedSources[0]->mSrcImg;
-                if ((sharedMPP->mAssignedSources[0]->mSourceType == MPP_SOURCE_COMPOSITION_TARGET) ||
-                    (sharedMPP->mAssignedSources[0]->mM2mMPP != NULL)) {
-                    checkImg = sharedMPP->mAssignedSources[0]->mMidImg;
-                }
-                if (checkImg.transform & HAL_TRANSFORM_ROT_90)
-                    return false;
-
-                if (checkImg.compressed == 0)
-                    return true;
-
-                if (checkImg.w > 2048)
-                    return false;
-                else {
-                    if (src.w < 2048)
-                        return true;
-                    else
-                        return false;
-                }
-            } else {
-                MPP_LOGE("Invalid sharedMPP[%d, %d] mAssignedSources size(%zu)",
-                        sharedMPP->mPhysicalType,
-                        sharedMPP->mPhysicalIndex,
-                        sharedMPP->mAssignedSources.size());
-            }
-        }
-        return false;
     } else {
         return true;
     }

@@ -61,7 +61,6 @@ bool ExynosMPPModule::isSupportedCompression(struct exynos_image &src)
 
 bool ExynosMPPModule::isSupportedTransform(struct exynos_image &src)
 {
-    ExynosMPP *sharedMPP = NULL;
     switch (mPhysicalType)
     {
     case MPP_MSC:
@@ -83,34 +82,7 @@ bool ExynosMPPModule::isSupportedTransform(struct exynos_image &src)
         }
     case MPP_DPP_VGRFS:
         if (isFormatYUV420(src.format)) {
-            /* HACK */
-            if ((src.transform != 0) && isFormat10BitYUV420(src.format)) return false;
-
-            /* GF0 shares memory with VGRFS0 */
-            sharedMPP = mResourceManager->getExynosMPP(MPP_DPP_GF, 1);
-            if (sharedMPP == NULL) {
-                MPP_LOGE("sharedMPP is NULL");
-                return false;
-            }
-
-            if ((src.transform & HAL_TRANSFORM_ROT_90) &&
-                (sharedMPP->mAssignedState & MPP_ASSIGN_STATE_ASSIGNED)) {
-                if (sharedMPP->mAssignedSources.size() != 1) {
-                    MPP_LOGE("Invalid sharedMPP[%d, %d] mAssignedSources size(%zu)",
-                            sharedMPP->mPhysicalType,
-                            sharedMPP->mPhysicalIndex,
-                            sharedMPP->mAssignedSources.size());
-                    return false;
-                }
-                exynos_image checkImg = sharedMPP->mAssignedSources[0]->mSrcImg;
-                if ((sharedMPP->mAssignedSources[0]->mSourceType == MPP_SOURCE_COMPOSITION_TARGET) ||
-                    (sharedMPP->mAssignedSources[0]->mM2mMPP != NULL)) {
-                    checkImg = sharedMPP->mAssignedSources[0]->mMidImg;
-                }
-                if (checkImg.compressed == 1)
-                    return false;
-                }
-            return true;
+            return false;
         }
         /* RGB case */
         if ((src.transform & HAL_TRANSFORM_ROT_90) == 0)

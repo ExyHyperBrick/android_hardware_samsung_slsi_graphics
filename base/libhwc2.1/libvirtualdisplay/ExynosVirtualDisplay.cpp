@@ -493,14 +493,6 @@ void ExynosVirtualDisplay::initPerFrameData()
 
 bool ExynosVirtualDisplay::checkSkipFrame()
 {
-    for (size_t i = 0; i < mLayers.size(); i++) {
-        ExynosLayer *layer = mLayers[i];
-        if (layer->mCompositionType == HWC2_COMPOSITION_SCREENSHOT) {
-            DISPLAY_LOGD(eDebugVirtualDisplay, "checkSkipFrame(), skip rotation animation layer");
-            return true;
-        }
-    }
-
     if (mLayers.size() == 0) {
         DISPLAY_LOGD(eDebugVirtualDisplay, "checkSkipFrame(), mLayers.size() %zu", mLayers.size());
         return true;

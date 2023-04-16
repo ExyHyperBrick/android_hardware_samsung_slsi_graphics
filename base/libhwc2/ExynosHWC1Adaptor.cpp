@@ -502,15 +502,7 @@ int create_layers(ExynosDisplay *display, hwc_display_contents_1_t *contents)
             layer->printLayer();
         }
 
-#ifdef TARGET_USES_HWC2
-        if (hwLayer->compositionType == HWC2_COMPOSITION_SCREENSHOT &&
-            display->mDisplayId != HWC_DISPLAY_PRIMARY)
-            layer->setLayerCompositionType(HWC2_COMPOSITION_SCREENSHOT);
-        else
-            layer->setLayerCompositionType(HWC2_COMPOSITION_INVALID);
-#else
         layer->setLayerCompositionType(HWC2_COMPOSITION_INVALID);
-#endif
         layer->mExynosCompositionType = HWC2_COMPOSITION_INVALID;
         layer->setLayerBuffer(handle, (int32_t)hwLayer->acquireFenceFd);
         layer->setLayerSurfaceDamage(hwLayer->surfaceDamage);

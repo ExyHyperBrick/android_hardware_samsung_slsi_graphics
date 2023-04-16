@@ -342,11 +342,7 @@ bool ExynosVirtualDisplay::checkSkipFrame()
 {
     for (size_t i = 0; i < mLayers.size(); i++) {
         ExynosLayer *layer = mLayers[i];
-#ifdef TARGET_USES_HWC2
-        if (layer->mCompositionType == HWC2_COMPOSITION_SCREENSHOT) {
-#else
         if (layer->mLayerFlag & VIRTUAL_DISLAY_SKIP_LAYER) {
-#endif
             DISPLAY_LOGD(eDebugVirtualDisplay, "checkSkipFrame(), layer include VIRTUAL_DISLAY_SKIP_LAYER flag");
             return true;
         }

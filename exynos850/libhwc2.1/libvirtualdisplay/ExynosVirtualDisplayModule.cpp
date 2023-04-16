@@ -41,29 +41,6 @@ int32_t ExynosVirtualDisplayModule::getDisplayAttribute(
     int32_t /*hwc2_attribute_t*/ __unused attribute, int32_t* __unused outValue)
 {
     switch(attribute) {
-        case HWC_DISPLAY_COMPOSITION_TYPE:
-            *outValue = (int32_t)mCompositionType;
-            break;
-        case HWC_DISPLAY_GLES_FORMAT:
-            *outValue = (int32_t)mGLESFormat;
-            break;
-        case HWC_DISPLAY_SINK_BQ_FORMAT:
-            if (mIsSkipFrame)
-                *outValue = (int32_t)0xFFFFFFFF;
-            else if (mIsSecureDRM && !mIsSecureVDSState)
-                *outValue = (int32_t)HAL_PIXEL_FORMAT_EXYNOS_YCbCr_420_SPN;
-            else
-                *outValue = (int32_t)mGLESFormat;
-            break;
-        case HWC_DISPLAY_SINK_BQ_USAGE:
-            *outValue = (int32_t)mSinkUsage;
-            break;
-        case HWC_DISPLAY_SINK_BQ_WIDTH:
-            *outValue = (int32_t)mDisplayWidth;
-            break;
-        case HWC_DISPLAY_SINK_BQ_HEIGHT:
-            *outValue = (int32_t)mDisplayHeight;
-            break;
         default:
             ALOGE("unknown display attribute %u", attribute);
             return -EINVAL;

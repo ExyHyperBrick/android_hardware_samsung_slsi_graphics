@@ -352,11 +352,7 @@ bool ExynosExternalDisplay::checkRotate()
     for (size_t i = 0; i < mLayers.size(); i++) {
         ExynosLayer *layer = mLayers[i];
 
-#ifdef TARGET_USES_HWC2
-        if (layer->mCompositionType == HWC2_COMPOSITION_SCREENSHOT) {
-#else
         if (layer->mLayerFlag & EXTERNAL_DISPLAY_SKIP_LAYER) {
-#endif
             ALOGV("include rotation animation layer");
             layer->mOverlayInfo = eSkipRotateAnim;
             for (size_t j = 0; j < mLayers.size(); j++) {

@@ -171,42 +171,16 @@ void ExynosExternalDisplay::hotplug(){
 bool ExynosExternalDisplay::handleRotate()
 {
     if (mSkipStartFrame < SKIP_EXTERNAL_FRAME) {
-        for (size_t i = 0; i < mLayers.size(); i++) {
-            ExynosLayer *layer = mLayers[i];
-            if (layer->mCompositionType == HWC2_COMPOSITION_SCREENSHOT)
-                layer->mCompositionType = HWC2_COMPOSITION_DEVICE;
-        }
         mIsSkipFrame = false;
         return false;
     }
 
-    for (size_t i = 0; i < mLayers.size(); i++) {
-        ExynosLayer *layer = mLayers[i];
-
-        if (layer->mCompositionType == HWC2_COMPOSITION_SCREENSHOT) {
-            DISPLAY_LOGD(eDebugExternalDisplay, "include rotation animation layer");
-            layer->mOverlayInfo = eSkipRotateAnim;
-            for (size_t j = 0; j < mLayers.size(); j++) {
-                ExynosLayer *skipLayer = mLayers[j];
-                skipLayer->mValidateCompositionType = HWC2_COMPOSITION_DEVICE;
-            }
-            mIsSkipFrame = true;
-            return true;
-        }
-    }
     mIsSkipFrame = false;
     return false;
 }
 
 bool ExynosExternalDisplay::checkRotate()
 {
-    for (size_t i = 0; i < mLayers.size(); i++) {
-        ExynosLayer *layer = mLayers[i];
-
-        if (layer->mCompositionType == HWC2_COMPOSITION_SCREENSHOT) {
-            return true;
-        }
-    }
     return false;
 }
 

@@ -25,7 +25,7 @@
 
 #define VSYNC_DEV_PREFIX "/sys/devices/platform/"
 #define PSR_DEV_NAME  "16030000.decon_f/psr_info"
-#define DP_LINK_NAME	"10ab0000.displayport"
+#define DP_LINK_NAME	"11090000.displayport"
 #define DP_UEVENT_NAME	"change@/devices/platform/%s/extcon/extcon0"
 #define DP_CABLE_STATE_NAME "/sys/devices/platform/%s/extcon/extcon0/cable.%d/state"
 #define BRIGHTNESS_NODE_BASE "/sys/class/backlight/panel/brightness"

@@ -193,7 +193,7 @@ int32_t ExynosDisplayFbInterface::setActiveConfig(hwc2_config_t config)
                 mExynosDisplay->mXres, mExynosDisplay->mYres,
                 mExynosDisplay->mVsyncPeriod,
                 mExynosDisplay->mXdpi, mExynosDisplay->mYdpi);
-#elifdef USES_SET_DISPLAY_MODE_IOCTL
+#elif defined(USES_SET_DISPLAY_MODE_IOCTL)
         displayConfigs_t _config = mExynosDisplay->mDisplayConfigs[config];
         struct decon_display_mode display_mode;
         memset(&display_mode, 0, sizeof(decon_display_mode));
